@@ -1,10 +1,10 @@
 %include "lib.inc"
 
+
 section .data
-	tableWidth	equ 10
-	tableHeight	equ 10
-	tableSize	equ tableWidth * tableHeight + tableHeight 
+	tableSize	equ TABLE_WIDTH * TABLE_HEIGHT + TABLE_HEIGHT
 	table_char	db	'#'
+	apple_char	db	'*'
 	eater_char	db	'@'
 	new_line_char	db	10
 	space_char	db 	' ' 
@@ -20,7 +20,7 @@ game:
 	clear_term
 	call fill_table 
 
-	print_str table, tableSize
+	print_str table, tableSize 
 	
 input:
 	read_char inputChar
@@ -80,7 +80,7 @@ top_line:
 	mov	[table + ebx], eax	  ; transition
 	inc	ebx		  ; table address counter
 	inc	edi		  ; table width counter
-	cmp	edi, tableWidth
+	cmp	edi, TABLE_WIDTH
 	jne	top_line
 
 	mov 	eax, [new_line_char] 
@@ -89,23 +89,23 @@ top_line:
 check_eater_pos:
 	cmp	byte [eaterXPos], 0 
 	je	min_x_pos
-	cmp	byte[eaterXPos], tableWidth - 1 
+	cmp	byte[eaterXPos], TABLE_WIDTH - 1 
 	je	max_x_pos
 	cmp	byte [eaterYPos], 0
 	je	min_y_pos
-	cmp	byte[eaterYPos], tableHeight - 1 
+	cmp	byte[eaterYPos], TABLE_HEIGHT - 1 
 	je	max_y_pos
 	jmp center
 
 
 min_x_pos:
-	mov	byte [eaterXPos], tableWidth - 2
+	mov	byte [eaterXPos], TABLE_WIDTH - 2
 	jmp	center
 max_x_pos:
 	mov	byte [eaterXPos], 1
 	jmp	center
 min_y_pos:
-	mov	byte [eaterYPos], tableHeight - 2
+	mov	byte [eaterYPos], TABLE_HEIGHT - 2
 	jmp	center
 max_y_pos:
 	mov	byte [eaterYPos], 1
@@ -140,7 +140,7 @@ cont:
 	mov 	[table + ebx], eax
 
 	inc	edi
-	cmp 	edi, tableWidth - 2
+	cmp 	edi, TABLE_WIDTH - 2
 	jne	space_line
 
 	inc	ebx
@@ -152,7 +152,7 @@ cont:
 	mov 	[table + ebx], eax
 
 	inc	esi
-	cmp	esi, tableHeight - 2
+	cmp	esi, TABLE_HEIGHT - 2
 	jne	center
 
 	xor	edi, edi
@@ -164,7 +164,7 @@ bottom_line:
 	mov	[table + ebx], eax	  
 	inc	ebx		  
 	inc	edi		  
-	cmp	edi, tableWidth
+	cmp	edi, TABLE_WIDTH
 	jne	bottom_line
 
 	mov 	eax, [new_line_char] 
