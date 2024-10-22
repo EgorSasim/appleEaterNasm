@@ -53,6 +53,7 @@ space_char	db 	' '
 	xor 	edi, edi
 	xor	ebx, ebx
 
+
 ;ebx - index to go through table string
 ;edi, esi - indexes to go throgh "row" and "column" of table
 
@@ -76,9 +77,11 @@ center:
 space_line:
 	inc	ebx
 
+	xor	eax, eax
 	mov	eax, %5 - 1
 	cmp	eax, esi
 	jne	space
+	xor	eax, eax
 	mov	eax, %4 - 1
 	cmp	eax, edi
 	jne	space

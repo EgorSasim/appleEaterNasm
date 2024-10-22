@@ -12,22 +12,51 @@ section .bss
 section .text 
 global _start
 _start:
+	mov	esi, 1	
+	mov	edi, 1
 game:
-	mov 	r8d, 1
-	clear_term 
-	mov	edi, [eaterXPos]
-	mov	esi, [eaterYPos]
-	fill_table table, tableWidth, tableHeight, edi, 1 
+	clear_term
+	fill_table table, tableWidth, tableHeight, edi, esi 
 
 	print_str table, tableSize
 	
 input:
 	read_char inputChar
-	mov	eax, [inputChar]
+
+	inc	edx	
 	cmp	[inputChar], byte 10
 	je 	input	
+	
+	cmp	[inputChar], byte 'h'
+	je	go_left	
+
+	cmp	[inputChar], byte 'j'
+	je	go_down
+
+	cmp	[inputChar], byte 'k'
+	je	go_up
+
+	cmp	[inputChar], byte 'l'
+	je	go_right
+
 	cmp	[inputChar], byte 'q'
-	jne	game	
+	je	end
+
+	jmp 	game
+
+go_left:
+	dec	edi
+	jmp 	game
+go_right:
+	inc	edi
+	jmp	game
+go_up:
+	dec	esi
+	jmp	game
+go_down:
+	inc	esi
+	jmp	game
+
 end:
 	FINISH
 
