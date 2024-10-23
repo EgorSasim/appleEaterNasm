@@ -13,6 +13,7 @@ P.S.: U can combine available buttons. For example "hhhj + 'Enter'" move hero 3 
 
 ## COMPILATION
 U should have __nasm compiler__ on your computer. It's important!!!
+Program **will work only** on **Linux system** with **i386** harware **architecture** or same
 
 This game is written for __linux systems__ and use linux system __interupts__.
 
