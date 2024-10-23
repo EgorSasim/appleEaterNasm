@@ -3,7 +3,7 @@
 
 section .data
 	tableSize	equ TABLE_WIDTH * TABLE_HEIGHT + TABLE_HEIGHT
-	bufferSize	equ 5
+	bufferSize	equ	16 
 	total_count_str	db	"TOTAL COUNT: "
 	total_count_len equ	$ - total_count_str
 	table_char	db	'#'
@@ -16,7 +16,10 @@ section .data
 	appleXPos	db	0
 	appleYPos	db	0
 	appleGenerated	db	0
-	total_count	db	0
+	total_count	db	0	
+
+	gaming_description db	' To write command press enter',10, 'h -> left, j -> down',10, 'k -> up; l -> right; q -> exit',10
+	gaming_description_len equ $ - gaming_description 
 section .bss 
 	table 		resb tableSize
 	inputChar	resb 1
@@ -42,6 +45,9 @@ check_eater_and_apple_coords:
 apple_draw:
 	call setRandAppleValues
 	mov	byte [appleGenerated], 1
+	mov	al, [total_count]
+	inc	al
+	mov	[total_count], al
 
 table_draw:
 	call fill_table 
@@ -49,9 +55,33 @@ table_draw:
 	print_str table, tableSize 
 	print_str new_line_char, 1
 	print_str total_count_str, total_count_len
-	print_num [total_count], buffer, bufferSize
-	print_str new_line_char, 1
 	
+	;print number. Before print should convert to string
+	xor	eax, eax
+	mov	byte al, [total_count]
+	lea	edi, [buffer + 15]
+	mov 	byte [edi], 0x0A
+
+convert:
+	dec	edi
+	xor	edx, edx
+	mov	ecx, 10
+	div	ecx
+	add	dl, '0'
+	mov	[edi], dl
+	test	eax, eax
+	jnz	convert
+
+	mov	eax, 4
+	mov	ebx, 1
+	lea	ecx, [edi]
+	lea	edx, [buffer + 16]
+	sub	edx, ecx
+	int	0x80
+	
+	print_str new_line_char, 1
+	print_str gaming_description, gaming_description_len
+
 input:
 	read_char inputChar
 
@@ -174,7 +204,6 @@ apple:
 	cmp	eax, edi
 	jne	space	
 	mov	eax, [apple_char]
-	inc	byte [total_count]
 	jmp	cont
 
 space:
