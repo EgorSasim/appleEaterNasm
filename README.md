@@ -1,4 +1,5 @@
 # APPLE EATER NASM MINI GAME
+![image](https://github.com/user-attachments/assets/d12422b5-0666-4e68-9d9f-659277ed46d2)
 
 ## CONTROL
 To manage main hero ("@" sign) press on of the 5 available buttons:
